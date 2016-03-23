@@ -143,19 +143,24 @@ gulp.task('start',function(){
   });
 });
 gulp.task('csslint',function(){
-   gulp.src(_.union(configs.js,server.config,server.allJS))
-	.pipe(plugins.jsint())
-	.pipe(plugins.jsint.reporter());
+   gulp.src(_.union(configs.css))
+       .pipe(plugins.csslint('.csslintrc'))
+       .pipe(plugins.csslint.reporter())
+       .pipe(plugins.csslint.reporter(function (file) {
+           if (!file.csslint.errorCount) {
+               done();
+           }
+       }));
 });
 gulp.task('jshint',function(){
 	gulp.src(_.union(configs.js,server.config,server.allJS))
-	.pipe(plugins.jsint())
-	.pipe(plugins.jsint.reporter());
-})
+	.pipe(plugins.jshint())
+	.pipe(plugins.jshint.reporter());
+});
 //图片压缩
 gulp.task('img',function(){
 	
-})
+});
 //检查后编译less sass
 gulp.task('lint', function(done) {
       runSequence('less', 'sass', ['csslint', 'jshint'], done);
